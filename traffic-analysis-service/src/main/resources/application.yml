@@ -1,0 +1,36 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: traffic-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/traffic_data_db
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  elasticsearch:
+    uris: http://localhost:9200
+    connection-timeout: 5s
+    socket-timeout: 3s
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+cloud:
+  aws:
+    credentials:
+      access-key: INSERT_KEY
+      secret-key: INSERT_KEY
+    region:
+      static: eu-central-1
+    s3:
+      bucket: traffic-anomaly-evidence-2025

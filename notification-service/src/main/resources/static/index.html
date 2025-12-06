@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Traffic Anomaly Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #alerts { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll; background: #f9f9f9; }
+        .alert-item { padding: 10px; border-bottom: 1px solid #eee; }
+        .alert-high { color: red; font-weight: bold; }
+        .alert-security { color: blue; font-weight: bold; }
+    </style>
+</head>
+<body>
+<h1>Real-Time Traffic Anomalies</h1>
+<div id="status">Connecting...</div>
+<br>
+<div id="alerts"></div>
+
+<script type="text/javascript">
+    var stompClient = null;
+
+    function connect() {
+        var socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function (frame) {
+            document.getElementById('status').innerText = 'Connected: ' + frame;
+            console.log('Connected: ' + frame);
+
+            stompClient.subscribe('/topic/alerts', function (message) {
+                showAnomaly(JSON.parse(message.body));
+            });
+        });
+    }
+
+    function showAnomaly(anomaly) {
+        var alertsDiv = document.getElementById('alerts');
+        var newAlert = document.createElement('div');
+        newAlert.className = 'alert-item';
+
+        var typeClass = anomaly.anomalyType.includes("High") ? "alert-high" : "alert-security";
+
+        newAlert.innerHTML = `
+                <span class="${typeClass}">[${anomaly.anomalyType}]</span>
+                IP: ${anomaly.sourceIp} | Size: ${anomaly.sizeBytes} bytes <br>
+                <small>${anomaly.description}</small>
+            `;
+
+        alertsDiv.insertBefore(newAlert, alertsDiv.firstChild);
+    }
+
+    connect();
+</script>
+</body>
+</html>
