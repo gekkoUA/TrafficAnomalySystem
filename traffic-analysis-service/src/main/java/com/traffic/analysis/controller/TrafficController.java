@@ -18,11 +18,6 @@ public class TrafficController {
 
     private final TrafficService trafficService;
 
-    @GetMapping("/analyze")
-    public ResponseEntity<String> analyzeTraffic() {
-        return ResponseEntity.ok(trafficService.analyzeAndSave());
-    }
-
     @GetMapping("/reports")
     public ResponseEntity<List<AnomalyReport>> getAllReports() {
         return ResponseEntity.ok(trafficService.getAllReports());

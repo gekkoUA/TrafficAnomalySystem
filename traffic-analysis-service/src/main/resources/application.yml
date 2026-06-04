@@ -5,9 +5,9 @@ spring:
   application:
     name: traffic-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/traffic_data_db
+    url: jdbc:postgresql://localhost:5432/traffic_db
     username: postgres
-    password: password
+    password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

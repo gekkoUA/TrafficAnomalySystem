@@ -1,0 +1,43 @@
+### 1. Підписка ESP32 на вебхуки (Це ти вже успішно зробив)
+POST http://localhost:8083/api/webhooks/subscribe
+Content-Type: application/json
+
+{
+  "url": "http://10.10.10.3/alert"
+}
+
+### ----------------------------------------------------
+
+### 2. Реєстрація нового користувача (Робимо один раз)
+POST http://localhost:8081/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password"
+}
+
+### АБО Логін (якщо вже зареєструвався раніше)
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password"
+}
+
+### ----------------------------------------------------
+
+### 3. Симуляція трафіку (ДОДАЙ СВІЙ ТОКЕН СЮДИ)
+GET http://localhost:8082/api/traffic/analyze
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc4MDU5MTc2NywiZXhwIjoxNzgwNjc4MTY3fQ.l4lJXEETZ8HkewvK9NXggH_X_rwBJ8jRCADzForDqOc
+
+### 4. Прямий тест екрана ESP32 (В обхід RabbitMQ)
+POST http://10.10.10.3/alert
+Content-Type: application/json
+
+{
+  "anomalyType": "Test Attack",
+  "sourceIp": "192.168.1.100",
+  "sizeBytes": 9999
+}
